@@ -1,16 +1,15 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useCallback, useState, useEffect } from 'react'
-import { Image } from 'expo-image'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { StatusBar } from 'expo-status-bar'
-import { theme } from '../theme'
-import { Ionicons } from '@expo/vector-icons'
-import {fetchlocations} from "../api/weather"
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useCallback, useState, useEffect } from 'react';
+import { Image } from 'expo-image';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+import { theme } from '../theme';
+import { Ionicons } from '@expo/vector-icons';
+import { fetchLocations, fetchWeatherForecast } from '../api/weatherApi';
 import { debounce } from 'lodash';
-import {fetchWeatherForecast} from "../api/weather"
-import {weatherImages} from "../constants/index"
-import * as Progress from "react-native-progress"
-import {getData, storeData} from '../utils/asyncStorage'
+import { weatherImages } from '../constants';
+import * as Progress from 'react-native-progress';
+import { getData, storeData } from '../utils/asyncStorage';
 
 
 const Homescreen = () => {
@@ -38,9 +37,11 @@ const Homescreen = () => {
 
   const handleSearch = (text) => {
     if (text.length >= 2) {
-      fetchlocations({ cityName: text }).then((data) => {
-        setLocation(data);
+      fetchLocations({ cityName: text }).then((data) => {
+        setLocation(data || []);
       });
+    } else {
+      setLocation([]);
     }
   };
 
